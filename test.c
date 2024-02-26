@@ -1,35 +1,37 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "./libft/libft.h"
-char *get_pathi(char *env[] );char *check_cmd(char **splited , char *av);
+char *check_cmd(char **splited , char *av);char *get_pathi(char *env[] );
+void exec(char **av , char **env)
+{
+	if(!(*av) || !(*env))
+		perror("not valid!");
+	char *cmd = get_pathi(env);
+	printf("%s\n", cmd);
+}
 int main(int ac, char *av[], char *env[])
 {
-
-	char *path = get_pathi(env);
-	char **p = ft_split(path, ':');
-	char **sp = ft_split(av[1] , ' ');
-	char *cmd = check_cmd(p, sp[0]);
-	int fd = open(av[2], O_CREAT | O_RDWR | O_TRUNC, 0666);
-	int fd2 = open(av[3], O_RDONLY);
-	dup2(fd2, 0);
-	dup2(fd, 1);
+	int fds[2];
 	int pid;
+
+	if(ac < 5)
+		exit(1);
+	if(pipe(fds) == -1)
+		perror("pipe:");
 	pid = fork();
-	if (pid == -1)
-		perror("");
-	if (pid == 0)
-	{
-		if (execve(cmd , sp , env) == -1)
-			perror("");
-	}
-	
+	if(pid < 0)
+		perror("fork");
+	// if(!pid)
+	// 	child_process(fds[0] ,av, env);
+	// else
+	// 	parent_process(fds[1] , av , env);
+	// 	wait(NULL);
 }
 char *check_cmd(char **splited , char *av)
 {
 	int i = 0;
 	while(splited[i])
-	{
-		splited[i] = ft_strjoin(splited[i] , "/");
+	{ splited[i] = ft_strjoin(splited[i] , "/");
 		splited[i] = ft_strjoin(splited[i] , av);
 		int a = access(splited[i], X_OK);
 		if(a == 0)
