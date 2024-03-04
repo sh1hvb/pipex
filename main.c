@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/02/27 20:43:50 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/02/28 22:32:00 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void exec(char *av, char **env, int fd) {
     printf("%s\n", cmd1); printf("jidaj\n");
 
     if (cmd1){
-       
         if (execve(cmd1, cmd, env) == -1) {
 
             free(path); 
@@ -109,17 +108,6 @@ void exec(char *av, char **env, int fd) {
             exit(2);
         }
      } 
-    //  else 
-    // {
-    //     // while(1);
-    //     free(path); 
-    //     ft_free(splited); 
-    //     ft_free(cmd);
-    //     fprintf(stderr, "Error: command '%s' not found\n", av);
-    //     // system("leaks a.out");
-    //     exit(1);
-    // }
-
     free(path); 
     ft_free(splited); 
     ft_free(cmd);
