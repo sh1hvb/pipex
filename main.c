@@ -6,13 +6,34 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/02/28 22:32:00 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/04 12:39:27 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex.h"
-
+void exec(char *av, char **env) {
+    if (!av || !env) 
+    {
+        perror("not valid!");
+        exit(1);
+    }
+    char *path = get_path(env);
+    char **splited = ft_split(path, ':');
+    char **cmd = ft_split(av, ' ');
+    char *cmd1 = check_cmd(splited, cmd[0]);
+    if (cmd1)
+    {
+        if (execve(cmd1, cmd, env) == -1)
+        {
+            free(path); 
+            ft_free(splited); 
+            ft_free(cmd);
+            perror("execve");
+            exit(3);
+        }
+    }
+}
 void child_process(int *fds, char *av[], char *env[]) {
     int fd;
 
@@ -39,10 +60,11 @@ void child_process(int *fds, char *av[], char *env[]) {
         close(fd);
         exit(1);
     }
-    exec(av[2], env, fds[0]); 
+    exec(av[2], env); 
     perror("execve"); 
     exit(2); 
 }
+
 void ft_close(int *fds)
 {
     int status;
@@ -53,10 +75,10 @@ void ft_close(int *fds)
 			if (WEXITSTATUS(status) == 2 || WEXITSTATUS(status) == 1)
 				exit(WEXITSTATUS(status));
 		}
+
 }
 void parent_process(int *fds, char *av[], char *env[]) {
     int fd;
-
     if (!fds) {
         perror("not valid!");
         exit(1);
@@ -79,7 +101,7 @@ void parent_process(int *fds, char *av[], char *env[]) {
         exit(1);
     }
     // system("leaks a.out ");
-    exec(av[3], env, fds[0]); 
+    exec(av[3], env); 
     perror("execve");
     exit(2);
 }
@@ -134,7 +156,6 @@ int main(int ac, char *av[], char *env[]) {
         perror("fork");
         exit(1);
     }
-
 	if(!pid)
 		child_process(fds ,av, env);
 	else
@@ -147,35 +168,4 @@ int main(int ac, char *av[], char *env[]) {
     // system("leaks a.out");
 
 	}
-}
-
-char *check_cmd(char **splited, char *av) {
-    int i = 0;
-    if (access(av, X_OK) == 0)
-            return av;
-    while (splited[i]) {
-        char *cmd_path = ft_strjoin(splited[i], av);
-            if (access(cmd_path, X_OK) == 0)
-            return cmd_path;
-        free(cmd_path);
-        
-        i++;
-    }
-    return NULL;
-}
-
-char *get_path(char *env[]) {
-    int i = 0;
-    char *path_string = NULL;
-    char *path;
-    while (env[i]) {
-        if (ft_strnstr(env[i], "PATH=", 5)) {
-            path_string = ft_substr(env[i], 5, ft_strlen(env[i]) - 5);
-            break;
-        }
-        i++;
-    }
-    path = path_string;
-    free(path_string);
-    return path;
 }

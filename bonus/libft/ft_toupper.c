@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/04 12:38:50 by mchihab          ###   ########.fr       */
+/*   Created: 2023/11/04 12:44:32 by mchihab           #+#    #+#             */
+/*   Updated: 2023/11/12 19:14:26 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-#define PIPEX_H
-#include <stdio.h>
-#include <unistd.h>
-#include "./libft/libft.h"
-#include<sys/wait.h>
-
-char *get_path(char *env[] );
-char *check_cmd(char **splited , char *av);
-void exec(char *av , char **env);
-void ft_free(char **str);
-void ft_close(int *fds);
-
-#endif
+int	ft_toupper(int ch)
+{
+	if (ch >= 'a' && ch <= 'z')
+		ch -= 32;
+	return (ch);
+}
