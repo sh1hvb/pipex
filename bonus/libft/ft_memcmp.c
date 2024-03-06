@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/04 12:38:50 by mchihab          ###   ########.fr       */
+/*   Created: 2023/11/04 12:42:12 by mchihab           #+#    #+#             */
+/*   Updated: 2023/11/12 18:48:01 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-#define PIPEX_H
-#include <stdio.h>
-#include <unistd.h>
-#include "./libft/libft.h"
-#include<sys/wait.h>
+#include "libft.h"
 
-char *get_path(char *env[] );
-char *check_cmd(char **splited , char *av);
-void exec(char *av , char **env);
-void ft_free(char **str);
-void ft_close(int *fds);
+int	ft_memcmp(const void *ptr1, const void *ptr2, size_t n)
+{
+	const unsigned char	*s1;
+	const unsigned char	*s2;
 
-#endif
+	s1 = (unsigned char *)ptr1;
+	s2 = (unsigned char *)ptr2;
+	while (n--)
+	{
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		if (n)
+		{
+			s1++;
+			s2++;
+		}
+	}
+	return (0);
+}

@@ -1,26 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/04 12:38:50 by mchihab          ###   ########.fr       */
+/*   Created: 2023/11/04 12:41:58 by mchihab           #+#    #+#             */
+/*   Updated: 2023/11/16 21:51:20 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-#define PIPEX_H
-#include <stdio.h>
-#include <unistd.h>
-#include "./libft/libft.h"
-#include<sys/wait.h>
+#include "libft.h"
 
-char *get_path(char *env[] );
-char *check_cmd(char **splited , char *av);
-void exec(char *av , char **env);
-void ft_free(char **str);
-void ft_close(int *fds);
+long	ft_atoi(const char *str)
+{
+	long	i;
+	long	number;
+	int		sign;
 
-#endif
+	i = 0;
+	number = 0;
+	sign = 1;
+	while (str[i] && (str[i] == 32 || (str[i] >= 9 && str[i] <= 13)))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		number = (number * 10) + (str[i] - '0');
+		i++;
+	}
+	return (number * sign);
+}

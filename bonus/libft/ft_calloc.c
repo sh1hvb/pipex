@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/04 12:38:50 by mchihab          ###   ########.fr       */
+/*   Created: 2023/11/03 20:26:55 by mchihab           #+#    #+#             */
+/*   Updated: 2023/11/15 18:32:08 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-#define PIPEX_H
-#include <stdio.h>
-#include <unistd.h>
-#include "./libft/libft.h"
-#include<sys/wait.h>
+#include "libft.h"
 
-char *get_path(char *env[] );
-char *check_cmd(char **splited , char *av);
-void exec(char *av , char **env);
-void ft_free(char **str);
-void ft_close(int *fds);
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
 
-#endif
+	if (size > 0 && count >= SIZE_MAX / size)
+		return (NULL);
+	p = malloc(size * count);
+	if (!p)
+		return (NULL);
+	ft_memset(p, 0, size * count);
+	return (p);
+}
+// int main()
+// {
+//     printf("%s",ft_calloc(10,8));
+// }
