@@ -6,13 +6,23 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/05 23:33:18 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/07 17:09:19 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex_bonus.h"
-
+void ft_close(int *fds)
+{
+    int status;
+	close(fds[0]);
+	close(fds[1]);
+	while (waitpid(-1, &status, 0) != -1)
+		{
+			if (WEXITSTATUS(status) == 2 || WEXITSTATUS(status) == 1)
+				exit(WEXITSTATUS(status));
+		}
+}
 void ft_free(char **str)
 
 {
@@ -22,12 +32,6 @@ void ft_free(char **str)
         free(str[i++]);
     free(str);
     *str =NULL;
-}
-
-void ft_close(int *fds)
-{
-	close(fds[0]);
-	close(fds[1]);
 }
 
 char *check_cmd(char **splited, char *av) {
@@ -61,4 +65,55 @@ char *get_path(char *env[]) {
     }
 
     return path_string;
+}
+void add_pipe(char *p, char *env[])
+{
+    int fds[2];
+    int pid;
+    int n ;
+    
+    if(pipe(fds) == -1)
+        perror("pipe:");
+    pid = fork();
+    if(pid == -1)
+        perror("fork");
+    if(!pid)
+    {
+        close(fds[0]);
+        dup2(fds[1], 1);
+        exec(p,env);
+    }
+    close(fds[0]);
+    close(fds[1]);
+    dup2(fds[0], 0);
+}
+void exec(char *av, char **env) 
+{
+
+    if (!av || !env) 
+    {
+        perror("not valid!");
+        exit(1);
+    }
+    char *path = get_path(env); 
+    char **splited = ft_split(path, ':');
+    char **cmd = ft_split(av, ' ');
+    char *cmd1 = check_cmd(splited, cmd[0]);
+    if (access(cmd1, X_OK) != 0)
+    {
+        free(path); 
+        ft_free(splited); 
+        ft_free(cmd);
+        perror("CMD Not found");
+        exit(127);
+
+    }
+    if (execve(cmd1, cmd, env) == -1)
+    {
+        free(path); 
+        ft_free(splited); 
+        ft_free(cmd);
+        perror("execve");
+        exit(3);
+    }
 }
