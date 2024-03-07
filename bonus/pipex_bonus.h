@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:57 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/06 20:17:23 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/07 09:48:43 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,18 @@
 #include <stdbool.h>
 #include "libft/libft.h"
 #include<sys/wait.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <string.h>
 
-#ifndef here_doc
-#define her_doc 
-#endif
-typedef struct s_env
-{
-	char **env;
-	char *path_dplited[];
-}t_env;
+#define handle_error(msg) { perror(msg); exit(1); }
+
+void add_pipe(char *p, char *env[]);
+void exec(char *av, char **env);
 char *get_path(char *env[] );
 char *check_cmd(char **splited , char *av);
 void exec(char *av , char **env);
-void ft_close(int *fds);
 void ft_free(char **str);void herdoc(char **av);
 void here_doc_puts(char **av, int *fdp);
 
