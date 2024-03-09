@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/08 22:24:08 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:19:38 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void exec(char *av, char **env)
     if (access(cmd1, X_OK) != 0)
     {
         free(path); 
+        // free(cmd1);
         ft_free(splited); 
         ft_free(cmd);
         handle_error("cmd not found", 127)
@@ -30,10 +31,10 @@ void exec(char *av, char **env)
     if (execve(cmd1, cmd, env) == -1)
     {
         free(path); 
+        // free(cmd1);
         ft_free(splited); 
         ft_free(cmd);
         handle_error("cmd not found", 127);
-        exit(1);
     }
 }
 
@@ -60,8 +61,8 @@ void child_process(int *fds, char *av[], char *env[])
         handle_error("Error : file can't open ", 1);
     }
     exec(av[2], env); 
-    perror("execve"); 
-    exit(2); 
+    // perror("execve"); 
+    // exit(2); 
 }
 
 void parent_process(int *fds, char *av[], char *env[]) {
@@ -85,7 +86,7 @@ void parent_process(int *fds, char *av[], char *env[]) {
         handle_error("Error : dup2 " ,1);
     }
     exec(av[3], env); 
-    exit(0);
+    // exit(0);
 }
 
 int main(int ac, char *av[], char *env[]) 

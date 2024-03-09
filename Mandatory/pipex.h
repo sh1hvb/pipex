@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/08 22:20:33 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:09:16 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "libft/libft.h"
+#include "../libft/libft.h"
 #include<sys/wait.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -28,6 +28,7 @@
 void add_pipe(char *p, char *env[]);
 void exec(char *av, char **env);
 char *get_path(char *env[] );
+void ft_close(int *fds);
 char *check_cmd(char **splited , char *av);
 void exec(char *av , char **env);
 void ft_free(char **str);void herdoc(char **av);

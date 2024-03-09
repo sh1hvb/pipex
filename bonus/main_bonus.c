@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/08 22:27:31 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:22:55 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,10 @@ void setup_input_output(int ac, char *av[], int *fd_in, int *fd_out)
     if (ft_strcmp(av[1], "here_doc") == 0) 
     {
         if (ac < 6)
-        {
-            
-            write(2, "./a.out here_doc stop cmd1 cmd2 file.txt\n", 42);
-            exit(1);
-        }
+            handle_error("./a.out fd_in cmd1 cmd2 fd_out\n");
         *fd_out = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0777);
-        if (fd_out < 0)
-        {
-            perror("error open out_file");
-            exit(1);
-        }
+        if (*fd_out < 0)
+            handle_error("can't open file");
         herdoc(av);
     } 
     else 
@@ -36,10 +29,7 @@ void setup_input_output(int ac, char *av[], int *fd_in, int *fd_out)
         *fd_in = open(av[1], O_RDONLY);
         *fd_out = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
         if (*fd_out < 0 || *fd_in < 0)
-        {
-            perror("error open out_file | in_file");
-            exit(1);
-        }
+            handle_error("error open out_file | in_file");
         dup2(*fd_in, 0);
     }
 }
@@ -61,13 +51,15 @@ void create_pipes_and_execute(int ac, char *av[], char *env[], int fd_out)
         dup2(fd_out, 1);
         exec(av[ac - 2], env);
     }
-}
+    wait(NULL);
+ }
 
 void here_doc_puts(char **av, int *fdp){
-    char *line;
-    char *delimiter; 
+    char (*line) , (*delimiter); 
+
     delimiter = ft_strjoin(av[2], "\n");
-    while (1) {  
+    while (1) 
+    {  
         write(1, "heredoc> ", 9);
         line = get_next_line(0);
         if (!line || strcmp(line, delimiter) == 0) {
@@ -99,26 +91,19 @@ void herdoc(char **av)
     close(fds[1]);
     if(dup2(fds[0],0) == -1)
         handle_error("dup2");
-    wait(NULL);
 }
        
 int main(int ac, char *av[], char *env[]) 
 {
     int fd_out;
     int fd_in;
-    int status;
-    if (ac < 5 )
+
+    if (ac < 5 || !(*av))
         handle_error("invalid input! ?");
-    if(!(*env))
+    if(!(env))
         handle_error("cannot find the envirenments");
     setup_input_output(ac, av, &fd_in, &fd_out);
     create_pipes_and_execute(ac, av, env, fd_out);
-    while (waitpid(-1, &status, 0) != -1)
-	{
-	    if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 1)
-			exit(WEXITSTATUS(status));
-	}
-   
 }
 
 

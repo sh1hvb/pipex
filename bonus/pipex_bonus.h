@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:57 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/07 09:48:43 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:08:03 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "libft/libft.h"
+#include "../libft/libft.h"
 #include<sys/wait.h>
 #include <unistd.h>
 #include <sys/wait.h>

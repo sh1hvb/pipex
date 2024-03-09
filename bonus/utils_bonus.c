@@ -6,23 +6,13 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/09 00:04:17 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:25:13 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex_bonus.h"
-// void ft_close(int *fds)
-// {
-//     int status;
-// 	close(fds[0]);
-// 	close(fds[1]);
-// 	while (waitpid(-1, &status, 0) != -1)
-// 		{
-// 			if (WEXITSTATUS(status) == 2 || WEXITSTATUS(status) == 1)
-// 				exit(WEXITSTATUS(status));
-// 		}
-// }
+
 void ft_free(char **str)
 
 {
@@ -66,10 +56,11 @@ char *get_path(char *env[]) {
 
     return path_string;
 }
+
 void add_pipe(char *p, char *env[])
 {
     int fds[2];
-    int pid;
+    int pid ;
     
     if(pipe(fds) == -1)
         perror("pipe:");
@@ -84,6 +75,7 @@ void add_pipe(char *p, char *env[])
     }
     close(fds[1]);
     dup2(fds[0], 0);
+    // wait(NULL);
 }
 void exec(char *av, char **env) 
 {

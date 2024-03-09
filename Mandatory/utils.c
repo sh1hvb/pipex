@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/08 22:07:30 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/09 17:20:40 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ char *check_cmd(char **splited, char *av) {
     char *cmd_path;
 
     i = 0;
+    cmd_path = NULL;
     if (access(av, X_OK) == 0)
             return av;
     while (splited[i])
     {
-        cmd_path = ft_strjoin(splited[i], av);
-            // printf("%s\n", cmd_path);
-            if (access(cmd_path, X_OK) == 0)
-                return cmd_path;
+        cmd_path = ft_strjoin_ws(splited[i], av);
+        if (access(cmd_path, X_OK) == 0)
+            return cmd_path;
         free(cmd_path);
         i++;
     }
@@ -65,5 +65,6 @@ char *get_path(char *env[]) {
         }
         i++;
     }
+
     return path_string;
 }
