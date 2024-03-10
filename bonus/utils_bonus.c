@@ -6,16 +6,15 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 09:25:57 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/10 14:55:51 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 void	ft_free(char **str)
-
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -90,16 +89,17 @@ void	exec(char *av, char **env)
 	char	*path;
 	char	*cmd1;
 
-	*path = get_path(env);
-	**splited = ft_split(path, ':');
-	**cmd = ft_split(av, ' ');
-	*cmd1 = check_cmd(splited, cmd[0]);
+	path = get_path(env);
+	splited = ft_split(path, ':');
+	cmd = ft_split(av, ' ');
+	cmd1 = check_cmd(splited, cmd[0]);
 	if (execve(cmd1, cmd, env) < 0)
 	{
 		free(path);
 		free(cmd1);
 		ft_free(splited);
 		ft_free(cmd);
-		handle_error("cmd not found");
+		perror("cmd not found");
+		exit(EXIT_FAILURE);
 	}
 }

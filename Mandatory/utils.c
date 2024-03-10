@@ -6,11 +6,17 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 09:16:29 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/10 13:56:17 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	handle_error(char *msg, int ex)
+{
+	perror(msg);
+	exit(ex);
+}
 
 void	ft_free(char **str)
 {
