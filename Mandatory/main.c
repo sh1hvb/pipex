@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 09:22:15 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/10 14:40:40 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	exec(char *av, char **env)
 	char	*path;
 	char	*cmd1;
 
-	*path = get_path(env);
-	**splited = ft_split(path, ':');
-	**cmd = ft_split(av, ' ');
-	*cmd1 = check_cmd(splited, cmd[0]);
+	path = get_path(env);
+	splited = ft_split(path, ':');
+	cmd = ft_split(av, ' ');
+	cmd1 = check_cmd(splited, cmd[0]);
 	if (execve(cmd1, cmd, env) < 0)
 	{
 		free(path);
@@ -57,7 +57,6 @@ void	child_process(int *fds, char *av[], char *env[])
 		handle_error("Error : file can't open ", 1);
 	}
 	exec(av[2], env);
-	perror("execve");
 }
 
 void	parent_process(int *fds, char *av[], char *env[])
@@ -65,10 +64,7 @@ void	parent_process(int *fds, char *av[], char *env[])
 	int	fd;
 
 	if (!fds)
-	{
-		perror("not valid!");
-		exit(1);
-	}
+		handle_error("Error : file can't open ", 1);
 	fd = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	close(fds[1]);
 	if (fd == -1)
