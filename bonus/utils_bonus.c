@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 14:55:51 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/11 11:05:05 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	add_pipe(char *p, char *env[])
 {
 	int	fds[2];
 	int	pid;
+	int	id;
 
 	if (pipe(fds) == -1)
 		perror("pipe:");
@@ -78,8 +79,16 @@ void	add_pipe(char *p, char *env[])
 		dup2(fds[1], 1);
 		exec(p, env);
 	}
-	close(fds[1]);
-	dup2(fds[0], 0);
+	else
+	{
+		id = fork();
+		if (!id)
+		{
+			close(fds[1]);
+			dup2(fds[0], 0);
+		}
+		ft_close(fds);
+	}
 }
 
 void	exec(char *av, char **env)
@@ -100,6 +109,6 @@ void	exec(char *av, char **env)
 		ft_free(splited);
 		ft_free(cmd);
 		perror("cmd not found");
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 }

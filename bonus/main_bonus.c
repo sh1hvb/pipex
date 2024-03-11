@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 15:04:17 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/11 11:04:29 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	setup_input_output(int ac, char *av[], int *fd_in, int *fd_out)
 
 void	create_pipes_and_execute(int ac, char *av[], char *env[], int fd_out)
 {
-	int i, (pid), id = 0;
+	int i, (pid);
 	if (ft_strcmp(av[1], "here_doc") == 0)
 		i = 3;
 	else
@@ -48,11 +48,7 @@ void	create_pipes_and_execute(int ac, char *av[], char *env[], int fd_out)
 		dup2(fd_out, 1);
 		exec(av[ac - 2], env);
 	}
-	id = fork();
-	if (!id)
-		close(fd_out);
-	else
-		wait(NULL);
+	close(fd_out);
 }
 
 void	here_doc_puts(char **av, int *fdp)
@@ -101,6 +97,7 @@ int	main(int ac, char *av[], char *env[])
 {
 	int	fd_out;
 	int	fd_in;
+	int	status;
 
 	if (ac < 5 || !(*av))
 		handle_error("invalid input! ?", 1);
@@ -108,4 +105,11 @@ int	main(int ac, char *av[], char *env[])
 		handle_error("cannot find the envirenments", 127);
 	setup_input_output(ac, av, &fd_in, &fd_out);
 	create_pipes_and_execute(ac, av, env, fd_out);
+	close(fd_in);
+	close(fd_out);
+	while (waitpid(-1, &status, 0) != -1)
+	{
+		if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 1)
+			exit(WEXITSTATUS(status));
+	}
 }

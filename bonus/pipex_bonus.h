@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:57 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 14:47:41 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/11 09:53:44 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ void	herdoc(char **av);
 void	here_doc_puts(char **av, int *fdp);
 void	ft_close(int *fds);
 void	handle_error(char *msg, int ex);
+void	ft_close(int *fds);
 
 #endif
