@@ -108,6 +108,7 @@ void	exec(char *av, char **env)
 		path = NULL;
 		free(cmd1);
 		cmd1 = NULL;
+
 		ft_free(splited);
 		ft_free(cmd);
 		perror("cmd not found");
