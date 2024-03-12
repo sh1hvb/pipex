@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 NAME = pipex
-BONUS = pipexB
+BONUS = pipexb
 
 SRCS = Mandatory/main.c Mandatory/utils.c
 

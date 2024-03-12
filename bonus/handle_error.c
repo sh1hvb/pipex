@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 14:47:23 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/11 11:03:02 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/11 11:33:05 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_error(char *msg, int ex)
 {
 	perror(msg);
-	exit(WEXITSTATUS(ex));
+	exit(ex);
 }
 
 void	ft_close(int *fds)

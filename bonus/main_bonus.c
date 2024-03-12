@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/11 11:04:29 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/12 21:01:40 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ void	setup_input_output(int ac, char *av[], int *fd_in, int *fd_out)
 	{
 		if (ac < 6)
 			handle_error("./pipex fd_in cmd1 cmd2 fd_out\n", 1);
-		*fd_out = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0777);
+		*fd_out = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0666);
 		if (*fd_out < 0)
-			handle_error("can't open file", 1);
+			handle_error("can't open file", 127);
 		herdoc(av);
 	}
 	else
 	{
 		*fd_in = open(av[1], O_RDONLY);
-		*fd_out = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+		*fd_out = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0666);
 		if (*fd_out < 0 || *fd_in < 0)
 			handle_error("error open out_file | in_file", 127);
 		dup2(*fd_in, 0);
@@ -61,7 +61,7 @@ void	here_doc_puts(char **av, int *fdp)
 	{
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
-		if (!line || strcmp(line, delimiter) == 0)
+		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(delimiter);
 			delimiter = NULL;
@@ -100,9 +100,10 @@ int	main(int ac, char *av[], char *env[])
 	int	status;
 
 	if (ac < 5 || !(*av))
-		handle_error("invalid input! ?", 1);
-	if (!(env))
-		handle_error("cannot find the envirenments", 127);
+	{
+		perror("not vaild");
+		exit(1);
+	}
 	setup_input_output(ac, av, &fd_in, &fd_out);
 	create_pipes_and_execute(ac, av, env, fd_out);
 	close(fd_in);

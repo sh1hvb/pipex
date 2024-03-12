@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/11 11:05:27 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/12 21:00:46 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	exec(char *av, char **env)
 	if (execve(cmd1, cmd, env) < 0)
 	{
 		free(path);
+		path = NULL;
 		free(cmd1);
+		cmd1 = NULL;
+
 		ft_free(splited);
 		ft_free(cmd);
 		handle_error("cmd not found", 127);
@@ -59,7 +62,7 @@ void	child_process(int *fds, char *av[], char *env[])
 	exec(av[2], env);
 }
 
-void	parent_process(int *fds, char *av[], char *env[])
+void	tnd_child_process(int *fds, char *av[], char *env[])
 {
 	int	fd;
 
@@ -106,7 +109,7 @@ int	main(int ac, char *av[], char *env[])
 		if (id < 0)
 			handle_error("fork", 1);
 		if (id == 0)
-			parent_process(fds, av, env);
+			tnd_child_process(fds, av, env);
 		else
 			ft_close(fds);
 	}
