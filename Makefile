@@ -3,11 +3,11 @@ CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 NAME = pipex
-BONUS = pipexB
+BONUS = pipexb
 
 SRCS = Mandatory/main.c Mandatory/utils.c
 
-BONUS_SRCS = bonus/main_bonus.c bonus/utils_bonus.c
+BONUS_SRCS = bonus/main_bonus.c bonus/utils_bonus.c bonus/handle_error.c
 
 OBJS = $(SRCS:.c=.o)
 BOBJ = $(BONUS_SRCS:.c=.o)

@@ -6,33 +6,26 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 02:24:33 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/09 17:09:16 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/10 10:26:00 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PIPEX_H
+# define PIPEX_H
+# include "../libft/libft.h"
+# include <fcntl.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
-#ifndef PIPEX_BONUS_H
-#define PIPEX_BONUS_H
-#include <stdio.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include "../libft/libft.h"
-#include<sys/wait.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <string.h>
-
-#define handle_error(msg , ex) { perror(msg); exit(ex); }
-
-void add_pipe(char *p, char *env[]);
-void exec(char *av, char **env);
-char *get_path(char *env[] );
-void ft_close(int *fds);
-char *check_cmd(char **splited , char *av);
-void exec(char *av , char **env);
-void ft_free(char **str);void herdoc(char **av);
-void here_doc_puts(char **av, int *fdp);
-
-
+void	ft_close(int *fds);
+void	add_pipe(char *p, char *env[]);
+void	exec(char *av, char **env);
+char	*get_path(char *env[]);
+void	handle_error(char *msg, int ex);
+char	*check_cmd(char **splited, char *av);
+void	exec(char *av, char **env);
+void	ft_free(char **str);
 #endif
