@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/10 13:56:17 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/13 01:58:47 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_error(char *msg, int ex)
 {
 	perror(msg);
-	exit(ex);
+	exit(WEXITSTATUS((ex)));
 }
 
 void	ft_free(char **str)
@@ -49,12 +49,12 @@ char	*check_cmd(char **splited, char *av)
 
 	i = 0;
 	cmd_path = NULL;
-	if (access(av, X_OK) == 0)
+	if (access(av,F_OK & X_OK) == 0)
 		return (av);
 	while (splited[i])
 	{
 		cmd_path = ft_strjoin_ws(splited[i], av);
-		if (access(cmd_path, X_OK) == 0)
+		if (access(cmd_path,F_OK & X_OK) == 0)
 			return (cmd_path);
 		free(cmd_path);
 		i++;

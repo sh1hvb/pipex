@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/12 21:00:46 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/13 01:57:07 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	exec(char *av, char **env)
 	splited = ft_split(path, ':');
 	cmd = ft_split(av, ' ');
 	cmd1 = check_cmd(splited, cmd[0]);
-	if (execve(cmd1, cmd, env) < 0)
+	if(!path)
+		handle_error("cannot find the path",127);
+	if (execve(cmd1, cmd, env) < 0 )
 	{
 		free(path);
 		path = NULL;
@@ -32,6 +34,7 @@ void	exec(char *av, char **env)
 
 		ft_free(splited);
 		ft_free(cmd);
+		
 		handle_error("cmd not found", 127);
 	}
 }
@@ -59,7 +62,10 @@ void	child_process(int *fds, char *av[], char *env[])
 		close(fd);
 		handle_error("Error : file can't open ", 1);
 	}
+	
+
 	exec(av[2], env);
+
 }
 
 void	tnd_child_process(int *fds, char *av[], char *env[])
@@ -85,15 +91,30 @@ void	tnd_child_process(int *fds, char *av[], char *env[])
 		close(fd);
 		handle_error("Error : dup2 ", 1);
 	}
+	
 	exec(av[3], env);
-}
 
+}
+int checkenv(char **env)
+{
+	int i= 0;
+	while(env[i])
+	{
+		if(!ft_strncmp(env[i],"PATH=",5))
+			return 1;
+		i++;
+	}
+	return 0;
+}
 int	main(int ac, char *av[], char *env[])
 {
 	int	fds[2];
 	int	pid;
 	int	id;
-
+	if(!checkenv(env)){
+		perror("cannot find the path");
+		exit(127);
+	}
 	if (ac != 5)
 		handle_error("invalid input!?", 1);
 	if (pipe(fds) == -1)
