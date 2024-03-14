@@ -49,12 +49,12 @@ char	*check_cmd(char **splited, char *av)
 
 	i = 0;
 	cmd_path = NULL;
-	if (access(av,F_OK & X_OK) == 0)
+	if (access(av, F_OK & X_OK) == 0)
 		return (av);
 	while (splited[i])
 	{
 		cmd_path = ft_strjoin_ws(splited[i], av);
-		if (access(cmd_path,F_OK & X_OK) == 0)
+		if (access(cmd_path, F_OK & X_OK) == 0)
 			return (cmd_path);
 		free(cmd_path);
 		i++;

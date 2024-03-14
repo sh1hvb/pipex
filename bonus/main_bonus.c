@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:35:54 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/13 01:28:48 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/14 12:04:05 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	here_doc_puts(char **av, int *fdp)
 	{
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		if (!line || ft_strncmp(line, delimiter,ft_strlen(line)) == 0)
 		{
 			free(delimiter);
 			delimiter = NULL;
@@ -72,8 +72,6 @@ void	here_doc_puts(char **av, int *fdp)
 		ft_putstr_fd(line, fdp[1]);
 		free(line);
 	}
-	close(fdp[1]);
-	free(delimiter);
 }
 
 void	herdoc(char **av)
