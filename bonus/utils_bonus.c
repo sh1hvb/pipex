@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/13 15:40:18 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/14 11:57:02 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,15 @@ void	exec(char *av, char **env)
 	char	*cmd1;
 
 	path = get_path(env);
-	if(!path){
-		perror("cannot find the path");
+	if (!path)
+	{
+		write(2, "path not found\n", 15);
 		exit(127);
 	}
 	splited = ft_split(path, ':');
 	cmd = ft_split(av, ' ');
 	cmd1 = check_cmd(splited, cmd[0]);
-	if (execve(cmd1, cmd, env) < 0 || access(cmd1 , F_OK | X_OK))
+	if (execve(cmd1, cmd, env) < 0 || access(cmd1, F_OK | X_OK))
 	{
 		free(path);
 		path = NULL;
