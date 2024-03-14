@@ -34,9 +34,17 @@ char	*check_cmd(char **splited, char *av)
 		return (av);
 	while (splited[i])
 	{
+		if (splited[i] == NULL)
+		{
+			i++;
+			continue ;
+		}
 		cmd_path = ft_strjoin_ws(splited[i], av);
 		if (access(cmd_path, X_OK) == 0)
+		{
+			free(splited[i]);
 			return (cmd_path);
+		}
 		free(cmd_path);
 		i++;
 	}
@@ -45,8 +53,8 @@ char	*check_cmd(char **splited, char *av)
 
 char	*get_path(char *env[])
 {
-	int		i;
-	char	*path_string;
+	int i;
+	char *path_string;
 
 	i = 0;
 	path_string = NULL;
@@ -55,13 +63,12 @@ char	*get_path(char *env[])
 		if (ft_strnstr(env[i], "PATH=", 5))
 		{
 			path_string = ft_substr(env[i], 5, ft_strlen(env[i]) - 5);
-			break ;
+			return (path_string);
 		}
 		i++;
 	}
-	return (path_string);
+	return (NULL);
 }
-
 void	add_pipe(char *p, char *env[])
 {
 	int	fds[2];
