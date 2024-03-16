@@ -6,7 +6,7 @@
 /*   By: mchihab <mchihab@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 20:36:00 by mchihab           #+#    #+#             */
-/*   Updated: 2024/03/14 11:57:02 by mchihab          ###   ########.fr       */
+/*   Updated: 2024/03/10 14:55:51 by mchihab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,62 @@ void	ft_free(char **str)
 	*str = NULL;
 }
 
-char	*check_cmd(char **splited, char *av)
+char	*my_getenv(char *name, char **env)
 {
 	int		i;
-	char	*cmd_path;
+	int		j;
+	char	*sub;
 
 	i = 0;
-	cmd_path = NULL;
-	if (access(av, X_OK) == 0)
-		return (av);
-	while (splited[i])
-	{
-		if (splited[i] == NULL)
-		{
-			i++;
-			continue ;
-		}
-		cmd_path = ft_strjoin_ws(splited[i], av);
-		if (access(cmd_path, X_OK) == 0)
-		{
-			free(splited[i]);
-			return (cmd_path);
-		}
-		free(cmd_path);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*get_path(char *env[])
-{
-	int i;
-	char *path_string;
-
-	i = 0;
-	path_string = NULL;
 	while (env[i])
 	{
-		if (ft_strnstr(env[i], "PATH=", 5))
+		j = 0;
+		while (env[i][j] && env[i][j] != '=')
+			j++;
+		sub = ft_substr(env[i], 0, j);
+		if (ft_strcmp(sub, name) == 0)
 		{
-			path_string = ft_substr(env[i], 5, ft_strlen(env[i]) - 5);
-			return (path_string);
+			free(sub);
+			return (env[i] + j + 1);
 		}
+		free(sub);
 		i++;
 	}
 	return (NULL);
 }
+
+char	*get_path(char *cmd, char **env)
+{
+	int		i;
+	char	*exec;
+	char	**allpath;
+	char	*path_part;
+	char	**s_cmd;
+
+	i = -1;
+	allpath = ft_split(my_getenv("PATH", env), ':');
+	s_cmd = ft_split(cmd, ' ');
+	while (allpath[++i])
+	{
+		path_part = ft_strjoin(allpath[i], "/");
+		exec = ft_strjoin(path_part, s_cmd[0]);
+		free(path_part);
+		if (access(exec, F_OK | X_OK) == 0)
+		{
+			ft_free(s_cmd);
+			return (exec);
+		}
+		free(exec);
+	}
+	ft_free(allpath);
+	ft_free(s_cmd);
+	return (cmd);
+}
+
 void	add_pipe(char *p, char *env[])
 {
 	int	fds[2];
 	int	pid;
-	int	id;
 
 	if (pipe(fds) == -1)
 		perror("pipe:");
@@ -86,44 +91,28 @@ void	add_pipe(char *p, char *env[])
 		dup2(fds[1], 1);
 		exec(p, env);
 	}
-	else
-	{
-		id = fork();
-		if (!id)
-		{
-			close(fds[1]);
-			dup2(fds[0], 0);
-		}
-		ft_close(fds);
-	}
+	close(fds[1]);
+	dup2(fds[0], 0);
+	// while (waitpid(-1, &status, 0) != -1)
+	// {
+	// 	if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 1
+	// 		|| WEXITSTATUS(status) == 0)
+	// 		exit(WEXITSTATUS(status));
+	// }
 }
 
-void	exec(char *av, char **env)
+void	exec(char *cmd, char **env)
 {
-	char	**splited;
-	char	**cmd;
+	char	**s_cmd;
 	char	*path;
-	char	*cmd1;
 
-	path = get_path(env);
-	if (!path)
+	s_cmd = ft_split(cmd, ' ');
+	path = get_path(s_cmd[0], env);
+	if (execve(path, s_cmd, env) == -1)
 	{
-		write(2, "path not found\n", 15);
-		exit(127);
-	}
-	splited = ft_split(path, ':');
-	cmd = ft_split(av, ' ');
-	cmd1 = check_cmd(splited, cmd[0]);
-	if (execve(cmd1, cmd, env) < 0 || access(cmd1, F_OK | X_OK))
-	{
-		free(path);
-		path = NULL;
-		free(cmd1);
-		cmd1 = NULL;
-
-		ft_free(splited);
-		ft_free(cmd);
-		perror("cmd not found");
-		exit(127);
+		ft_putstr_fd("pipex: command not found: ", 2);
+		ft_putendl_fd(s_cmd[0], 2);
+		ft_free(s_cmd);
+		exit(0);
 	}
 }
